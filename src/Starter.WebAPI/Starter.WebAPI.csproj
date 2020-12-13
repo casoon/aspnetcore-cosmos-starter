@@ -8,10 +8,14 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.10" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Cosmos" Version="3.1.10" />
+    <PackageReference Include="Microsoft.AspNetCore.OData" Version="7.5.2" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Starter.Core\Starter.Core.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Controllers\" />
   </ItemGroup>
 </Project>

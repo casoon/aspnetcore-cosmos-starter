@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNet.OData.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -25,7 +26,17 @@ namespace Starter.WebAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            services.AddMvcCore(option => option.EnableEndpointRouting = false);
+
+
+            services.AddApiVersioning(o =>
+            {
+                o.ReportApiVersions = true;
+                o.AssumeDefaultVersionWhenUnspecified = true;
+                o.DefaultApiVersion = new ApiVersion(1, 0);
+            });
+
+            services.AddOData().EnableApiVersioning();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -40,11 +51,11 @@ namespace Starter.WebAPI
 
             app.UseRouting();
 
-            app.UseAuthorization();
-
-            app.UseEndpoints(endpoints =>
+            app.UseMvc(routes =>
             {
-                endpoints.MapControllers();
+                routes.EnableDependencyInjection();
+                routes.Select().Expand().OrderBy().Filter().MaxTop(null).Count();
+                routes.MapVersionedODataRoutes("odata", "odata", modelBuilder.GetEdmModels());
             });
         }
     }
